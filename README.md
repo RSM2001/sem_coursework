@@ -1,5 +1,3 @@
-Hello Hello 
-
 # Software Engineering Methods
 
 - Master Build Status [![Build Status](https://travis-ci.com/RSM2001/sem_coursework.svg?branch=main)](https://travis-ci.com/RSM2001/sem_coursework)
