@@ -1,0 +1,3 @@
+[submodule "db/group2db"]
+	path = db/group2db
+	url = https://github.com/lewisstevenmackenzie/group2db
