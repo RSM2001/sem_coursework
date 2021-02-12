@@ -2,8 +2,17 @@ package com.napier.sem;
 
 import java.sql.*;
 
+/**
+ * App
+ * Initialises connection to sql database
+ */
 public class App
 {
+    /**
+     * main method
+     * Initialises connection to sql database
+     * @param args array of command line arguments
+     */
     public static void main(String[] args)
     {
         try
@@ -37,7 +46,7 @@ public class App
             }
             catch (SQLException sqle)
             {
-                System.out.println("Failed to connect to database attempt " + Integer.toString(i));
+                System.out.println("Failed to connect to database attempt " + i);
                 System.out.println(sqle.getMessage());
             }
             catch (InterruptedException ie)
