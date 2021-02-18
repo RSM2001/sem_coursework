@@ -1,18 +1,25 @@
 package com.napier.sem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.sql.*;
 
 /**
  * App
- * Initialises connection to database
+ * Connects to MySQL database, executes queries and disconnects
  */
 public class App
 {
     /**
-     * Initialises connection to database
-     * @param args command line arguments
+     * Connection to MySQL database.
      */
-    public static void main(String[] args)
+    private Connection con = null;
+
+    /**
+     * Connect to the MySQL database.
+     */
+    public void connect()
     {
         try
         {
@@ -25,9 +32,7 @@ public class App
             System.exit(-1);
         }
 
-        // Connection to the database
-        Connection con = null;
-        int retries = 100;
+        int retries = 30;
         for (int i = 0; i < retries; ++i)
         {
             System.out.println("Connecting to database...");
@@ -38,9 +43,6 @@ public class App
                 // Connect to database
                 con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
-                // Wait a bit
-                Thread.sleep(10000);
-                // Exit for loop
                 break;
             }
             catch (SQLException sqle)
@@ -53,7 +55,13 @@ public class App
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
+    }
 
+    /**
+     * Disconnect from the MySQL database.
+     */
+    public void disconnect()
+    {
         if (con != null)
         {
             try
@@ -65,6 +73,69 @@ public class App
             {
                 System.out.println("Error closing connection to database");
             }
+        }
+    }
+
+    /**
+     * Main method
+     * @param args command line arguments
+     */
+    public static void main(String[] args)
+    {
+        // Create new Application
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        Country country = a.getCountry();
+
+        System.out.println("Code:"+country.code);
+        System.out.println("Name:"+country.name);
+        System.out.println("Population:"+country.population);
+
+        // Disconnect from database
+        a.disconnect();
+    }
+
+    public Country getCountry ()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String query = "";
+            try
+            {
+                File file = new File("./sqlqueries/1.sql");
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNext())
+                {
+                    query = query.concat(" " + scanner.next());
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                System.out.println("Error");
+            }
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(query);
+            // Return new country if valid.
+            // Check one is returned
+            Country country = new Country();
+            if (rset.next()) {
+                country.code = rset.getString("Code");
+                country.name = rset.getString("Name");
+                country.population = rset.getInt("Population");
+                return country;
+            } else
+                return null;
+        } catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
         }
     }
 }
