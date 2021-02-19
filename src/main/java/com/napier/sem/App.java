@@ -80,36 +80,43 @@ public class App
      * Main method
      * @param args command line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // Create new Application
         App a = new App();
 
         // Connect to database
         a.connect();
 
-        Country country = a.getCountry();
-
-        System.out.println("Code:"+country.code);
-        System.out.println("Name:"+country.name);
-        System.out.println("Population:"+country.population);
+        // Execute SQL statements in SQLQueries directory
+        for (int i = 1; i <= 32; i++)
+            a.executeQuery(i);
 
         // Disconnect from database
         a.disconnect();
     }
 
-    public Country getCountry ()
+    /**
+     * Executes SQL query
+     * @param count number of query to be executed
+     * @return result set from SQL query
+     */
+    public ResultSet executeQuery(int count)
     {
+        System.out.println("\nExecuting Query " + count + ".");
         try
         {
             // Create an SQL statement
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String query = "";
+            // Read in SQL file
             try
             {
-                File file = new File("./sqlqueries/1.sql");
+                // Create filepath from count
+                File file = new File("./sqlqueries/" + count + ".sql");
+                // Create new Scanner
                 Scanner scanner = new Scanner(file);
+                // Read lines into string
                 while (scanner.hasNextLine())
                 {
                     String readLine = scanner.nextLine();
@@ -119,24 +126,21 @@ public class App
             }
             catch (FileNotFoundException e)
             {
-                System.out.println("Error");
+                System.out.println("Error - File not found. Query number " + count + ".");
             }
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
             // Return new country if valid.
             // Check one is returned
-            Country country = new Country();
             if (rset.next()) {
-                country.code = rset.getString("Code");
-                country.name = rset.getString("Name");
-                country.population = rset.getInt("Population");
-                return country;
-            } else
+                System.out.println("Query complete.");
+                return rset;
+            }
+            else
                 return null;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get country details");
+            System.out.println("Failed to execute query.");
             return null;
         }
     }
