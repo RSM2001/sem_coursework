@@ -17,6 +17,11 @@ public class App
     private Connection con = null;
 
     /**
+     * The number of results to display
+     */
+    private int n;
+
+    /**
      * Connect to the MySQL database.
      */
     public void connect()
@@ -86,6 +91,8 @@ public class App
 
         // Connect to database
         a.connect();
+
+        //
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
