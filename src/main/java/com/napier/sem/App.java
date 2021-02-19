@@ -110,9 +110,9 @@ public class App
             {
                 File file = new File("./sqlqueries/1.sql");
                 Scanner scanner = new Scanner(file);
-                while (scanner.hasNext())
+                while (scanner.hasNextLine())
                 {
-                    query = query.concat(scanner.next() + '\n');
+                    query = query.concat(scanner.nextLine() + '\n');
                 }
             }
             catch (FileNotFoundException e)
