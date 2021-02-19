@@ -1,5 +1,5 @@
---This is comment
-SELECT code, name, population
+--Country
+SELECT *
 FROM country
-WHERE code = 'GBR'
+WHERE code = 'GBR' OR code = 'USA'
 ;

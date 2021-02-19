@@ -82,32 +82,10 @@ public class App
     }
 
     /**
-     * Main method
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        // Create new Application
-        App a = new App();
-
-        // Connect to database
-        a.connect();
-
-        //
-
-        // Execute SQL statements in SQLQueries directory
-        for (int i = 1; i <= 32; i++)
-            a.executeQuery(i);
-
-        // Disconnect from database
-        a.disconnect();
-    }
-
-    /**
      * Executes SQL query
      * @param count number of query to be executed
-     * @return result set from SQL query
      */
-    public ResultSet executeQuery(int count)
+    public void executeQuery(int count)
     {
         System.out.println("\nExecuting Query " + count + ".");
         try
@@ -116,6 +94,8 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String query = "";
+            // Create report type flag
+            String reportType = "";
             // Read in SQL file
             try
             {
@@ -127,7 +107,11 @@ public class App
                 while (scanner.hasNextLine())
                 {
                     String readLine = scanner.nextLine();
-                    if (!readLine.startsWith("--"))
+                    if (readLine.startsWith("--"))
+                    {
+                        reportType = readLine.substring(2);
+                    }
+                    else
                         query = query.concat(readLine + ' ');
                 }
             }
@@ -137,18 +121,52 @@ public class App
             }
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
-            // Return new country if valid.
-            // Check one is returned
-            if (rset.next()) {
-                System.out.println("Query complete.");
-                return rset;
+            // Check if result is empty
+            if (rset == null)
+                System.out.println("No results.");
+            //
+            while (rset.next()) {
+                if (reportType.equals("Country"))
+                    CountryReport(rset);
             }
-            else
-                return null;
+            System.out.println("Query complete.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to execute query.");
-            return null;
         }
+    }
+
+    /**
+     * Writes Country Report to .csv file
+     * @param rset row from query result
+     * @throws SQLException Field is not found
+     */
+    public void CountryReport(ResultSet rset) throws SQLException {
+        Country country = new Country();
+        country.code = rset.getString("Code");
+        country.name = rset.getString("Name");
+        country.continent = rset.getString("Continent");
+        country.region = rset.getString("Region");
+        country.population = rset.getInt( "Population");
+        country.capital = rset.getInt("Capital");
+    }
+
+    /**
+     * Main method
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        // Create new Application
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        // Execute SQL statements in SQLQueries directory
+        for (int i = 1; i <= 32; i++)
+            a.executeQuery(i);
+
+        // Disconnect from database
+        a.disconnect();
     }
 }
