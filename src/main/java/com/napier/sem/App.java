@@ -1,38 +1,25 @@
 package com.napier.sem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.sql.*;
 
 /**
  * App
- * Initialises connection to database
+ * Connects to MySQL database, executes queries and disconnects
  */
 public class App
 {
     /**
-     * Initialises connection to database
-     * @param args command line arguments
-     */
-    public static void main(String[] args)
-    {
-        // Create new Application
-        App a = new App();
-
-        // Connect to database
-        a.connect();
-
-        //Display information on London
-        City city = a.getCity(456);
-        a.displayCity(city);
-
-        // Disconnect from database
-        a.disconnect();
-    }
-
-
-    /**
      * Connection to MySQL database.
      */
     private Connection con = null;
+
+    /**
+     * The number of results to display
+     */
+    private int n = 10;
 
     /**
      * Connect to the MySQL database.
@@ -50,7 +37,7 @@ public class App
             System.exit(-1);
         }
 
-        int retries = 10;
+        int retries = 30;
         for (int i = 0; i < retries; ++i)
         {
             System.out.println("Connecting to database...");
@@ -94,52 +81,74 @@ public class App
         }
     }
 
-    public City getCity(int ID)
+    /**
+     * Main method
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        // Create new Application
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        //
+
+        // Execute SQL statements in SQLQueries directory
+        for (int i = 1; i <= 32; i++)
+            a.executeQuery(i);
+
+        // Disconnect from database
+        a.disconnect();
+    }
+
+    /**
+     * Executes SQL query
+     * @param count number of query to be executed
+     * @return result set from SQL query
+     */
+    public ResultSet executeQuery(int count)
     {
+        System.out.println("\nExecuting Query " + count + ".");
         try
         {
             // Create an SQL statement
             Statement stmt = con.createStatement();
             // Create string for SQL statement
-            String strSelect =
-                    "SELECT ID, Name, CountryCode, District, population "
-                            + "FROM city "
-                            + "WHERE ID = " + ID;
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new employee if valid.
-            // Check one is returned
-            if (rset.next())
+            String query = "";
+            // Read in SQL file
+            try
             {
-                City city = new City();
-                city.ID = rset.getInt("ID");
-                city.name = rset.getString("Name");
-                city.countryCode = rset.getString("CountryCode");
-                city.district = rset.getString("District");
-                city.population = rset.getInt("population");
-                return city;
+                // Create filepath from count
+                File file = new File("./sqlqueries/" + count + ".sql");
+                // Create new Scanner
+                Scanner scanner = new Scanner(file);
+                // Read lines into string
+                while (scanner.hasNextLine())
+                {
+                    String readLine = scanner.nextLine();
+                    if (!readLine.startsWith("--"))
+                        query = query.concat(readLine + ' ');
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                System.out.println("Error - File not found. Query number " + count + ".");
+            }
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(query);
+            // Return new country if valid.
+            // Check one is returned
+            if (rset.next()) {
+                System.out.println("Query complete.");
+                return rset;
             }
             else
                 return null;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get city details");
+            System.out.println("Failed to execute query.");
             return null;
-        }
-    }
-
-    public void displayCity(City city)
-    {
-        if (city != null)
-        {
-            System.out.println(
-                    "ID: " + city.ID + "\n"
-                            + "City: " + city.name + "\n"
-                            + "Country Code: " + city.countryCode + "\n"
-                            + "District: " + city.district + "\n"
-                            + "population:" + city.population + "\n");
         }
     }
 }
