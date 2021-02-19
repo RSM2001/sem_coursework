@@ -19,7 +19,7 @@ public class App
     /**
      * The number of results to display
      */
-    private int n;
+    private int n = 10;
 
     /**
      * Connect to the MySQL database.
