@@ -114,7 +114,7 @@ public class App
                 {
                     String readLine = scanner.nextLine();
                     if (!readLine.startsWith("--"))
-                        query = query.concat(scanner.nextLine() + ' ');
+                        query = query.concat(readLine + ' ');
                 }
             }
             catch (FileNotFoundException e)
