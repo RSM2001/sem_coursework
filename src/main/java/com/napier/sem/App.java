@@ -112,7 +112,9 @@ public class App
                 Scanner scanner = new Scanner(file);
                 while (scanner.hasNextLine())
                 {
-                    query = query.concat(scanner.nextLine() + '\n');
+                    String readLine = scanner.nextLine();
+                    if (!readLine.startsWith("--"))
+                        query = query.concat(scanner.nextLine() + ' ');
                 }
             }
             catch (FileNotFoundException e)
