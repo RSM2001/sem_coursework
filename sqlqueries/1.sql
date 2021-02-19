@@ -1,4 +1,4 @@
---This is a comment;
+--This is comment
 SELECT code, name, population
 FROM country
 WHERE code = 'GBR'
