@@ -14,7 +14,6 @@ public class Country {
     /**
      * the continent where the country resides
      */
-    //public enum Continent{Asia,Europe, NorthAmerica,Africa,Oceania,Antarctica,SouthAmerica}
     public String continent;
 
     /**
