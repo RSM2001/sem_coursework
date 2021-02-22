@@ -1,8 +1,5 @@
 package com.napier.sem;
 
-import com.sun.jdi.connect.spi.TransportService;
-import com.sun.org.apache.bcel.internal.generic.PopInstruction;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
