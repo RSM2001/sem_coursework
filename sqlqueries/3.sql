@@ -3,3 +3,4 @@ SELECT Code, Name, Continent, Region, Population, Capital
 FROM country
 WHERE Region = 'Western Europe'
 ORDER BY Population DESC
+;
