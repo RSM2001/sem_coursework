@@ -2,6 +2,7 @@ package com.napier.sem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 import java.sql.*;
 
@@ -94,8 +95,6 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String query = "";
-            // Create report type identifier
-            String reportType = "";
             // Read in SQL file
             try
             {
@@ -108,11 +107,7 @@ public class App
                 {
                     String readLine = scanner.nextLine();
                     readLine = readLine.replace(" n ", Integer.toString(n));
-                    if (readLine.startsWith("--"))
-                    {
-                        reportType = readLine.substring(2);
-                    }
-                    else
+                    if (!readLine.startsWith("--"))
                         query = query.concat(readLine + ' ');
                 }
             }
@@ -128,149 +123,30 @@ public class App
                 return;
             }
             // Create .csv file if it doesn't exist, open if it exists
+            FileWriter csvWriter = new FileWriter("./query-results.csv", true);
+            // Get column names from meta data
+            ResultSetMetaData rsetMetaData = rset.getMetaData();
+
+            for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
+                csvWriter.append(rsetMetaData.getColumnName(i)).append(",");
+            csvWriter.append("\n");
+
             // Write results to .csv file
             while (rset.next()) {
-                String resultStr;
-                // Country report
-                switch (reportType) {
-                    case "Country":
-                        resultStr = CountryReport(rset);
-                        break;
-
-                    case "City":
-                        resultStr = CityReport(rset);
-                        break;
-
-                    case "CapitalCity":
-                        resultStr = CapitalCityReport(rset);
-                        break;
-
-                    case "PopulationCountry":
-                        resultStr = PopulationCountryReport(rset);
-                        break;
-
-                    case "PopulationRegion":
-                        resultStr = PopulationRegionReport(rset);
-                        break;
-
-                    case "PopulationContinent":
-                        resultStr = PopulationContinentReport(rset);
-                        break;
-
-                    default:
-                        System.out.println("No output type specified.");
-                }
-
-                //.csv write
+                String resultStr = "";
+                for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
+                    resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                // .csv writer
+                csvWriter.append(resultStr.concat("\n"));
             }
+            csvWriter.append("\n\n\n");
+            csvWriter.flush();
+            csvWriter.close();
             System.out.println("Query complete.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to execute query.");
         }
-    }
-
-    /**
-     * Creates Country Report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String CountryReport(ResultSet rset) throws SQLException {
-        Country country = new Country();
-        country.code = rset.getString("Code");
-        country.name = rset.getString("Name");
-        country.continent = rset.getString("Continent");
-        country.region = rset.getString("Region");
-        country.population = rset.getInt( "Population");
-        country.capital = rset.getInt("Capital");
-
-        return country.code + "," + country.name + "," +
-                country.continent + "," + country.region + "," +
-                country.population+ "," + country.capital;
-    }
-
-    /**
-     * Creates City report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String CityReport(ResultSet rset) throws SQLException {
-        City city = new City();
-        city.name = rset.getString("Code");
-        city.countryCode = rset.getString("Name");
-        city.district = rset.getString("District");
-        city.population = rset.getInt("Population");
-
-        return city.name + "," + city.countryCode + "," +
-                city.district + "," + city.population;
-    }
-
-    /**
-     * Creates Capital City report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String CapitalCityReport(ResultSet rset) throws SQLException {
-        City city = new City();
-        city.name = rset.getString("Code");
-        city.countryCode = rset.getString("Name");
-        city.population = rset.getInt("Population");
-
-        return city.name + "," + city.countryCode + "," + city.population;
-    }
-
-    /**
-     * Creates Population Country report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String PopulationCountryReport(ResultSet rset) throws SQLException {
-        Country country = new Country();
-        country.name = rset.getString("Name");
-        country.population = rset.getInt("Population");
-        String urbanLivingPerc = rset.getString(2);
-        String ruralLivingPerc = rset.getString(3);
-
-        return country.name + "," + country.population + "," +
-                urbanLivingPerc + "," + ruralLivingPerc;
-    }
-
-    /**
-     * Creates Population Region report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String PopulationRegionReport(ResultSet rset) throws SQLException {
-        Country country = new Country();
-        country.region = rset.getString("Region");
-        country.population = rset.getInt("Population");
-        String urbanLivingPerc = rset.getString(2);
-        String ruralLivingPerc = rset.getString(3);
-
-        return country.region + "," + country.population + "," +
-                urbanLivingPerc + "," + ruralLivingPerc;
-    }
-
-    /**
-     * Creates Population Continent report line to write to .csv file
-     * @param rset row from query result
-     * @return string formatted to be written to .csv
-     * @throws SQLException Field is not found
-     */
-    public String PopulationContinentReport(ResultSet rset) throws SQLException {
-        Country country = new Country();
-        country.continent = rset.getString("Continent");
-        country.population = rset.getInt("Population");
-        String urbanLivingPerc = rset.getString(2);
-        String ruralLivingPerc = rset.getString(3);
-
-        return country.continent + "," + country.population + "," +
-                urbanLivingPerc + "," + ruralLivingPerc;
     }
 
     /**
