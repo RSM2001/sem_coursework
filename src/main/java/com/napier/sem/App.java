@@ -132,9 +132,9 @@ public class App
             csvWriter.append("\n");
 
             // Write results to .csv file
+            String resultStr;
             while (rset.next()) {
-                System.out.println("TEST");
-                String resultStr = "";
+                resultStr = "";
                 for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
                     resultStr = resultStr.concat(rset.getString(i)).concat(",");
                 // .csv writer
