@@ -118,6 +118,7 @@ public class App
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
             // Check if result is empty
+            System.out.println("TEST");
             if (rset.isAfterLast()) {
                 System.out.println("No results.");
                 return;
