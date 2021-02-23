@@ -136,7 +136,14 @@ public class App
             while (rset.next()) {
                 resultStr = "";
                 for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
-                    resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                    try
+                    {
+                        resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                    }
+                    catch (Exception e)
+                    {
+                        resultStr = resultStr.concat("n/a,");
+                    }
                 // .csv writer
                 csvWriter.append(resultStr.concat("\n"));
             }
