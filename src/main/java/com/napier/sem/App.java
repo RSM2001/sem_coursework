@@ -118,20 +118,23 @@ public class App
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
             // Check if result is empty
-            System.out.println("TEST");
+            System.out.println("TEST1");
             if (rset.isAfterLast()) {
                 System.out.println("No results.");
                 return;
             }
+            System.out.println("TEST2");
             // Create .csv file if it doesn't exist, open if it exists
             FileWriter csvWriter = new FileWriter("./query-results.csv", true);
             // Get column names from meta data
             ResultSetMetaData rsetMetaData = rset.getMetaData();
+            System.out.println("TEST3");
 
             for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
                 csvWriter.append(rsetMetaData.getColumnName(i)).append(",");
             csvWriter.append("\n");
 
+            System.out.println("TEST4");
             // Write results to .csv file
             while (rset.next()) {
                 String resultStr = "";
@@ -140,6 +143,7 @@ public class App
                 // .csv writer
                 csvWriter.append(resultStr.concat("\n"));
             }
+            System.out.println("TEST5");
             csvWriter.append("\n\n\n");
             csvWriter.flush();
             csvWriter.close();
