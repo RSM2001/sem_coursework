@@ -138,7 +138,7 @@ public class App
                 for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
                     try
                     {
-                        resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                        resultStr = "\"".concat(resultStr.concat(rset.getString(i)).concat("\","));
                     }
                     catch (Exception e)
                     {
