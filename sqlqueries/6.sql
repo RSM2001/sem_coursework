@@ -1,7 +1,7 @@
---this is a comment
-SELECT Code, Name, Continent, Region, Population, Capital 
+--The top number of populated countries in a region where I choose the number.
+SELECT code, name, continent, region, population, capital
 FROM country
-WHERE Region = 'Eastern Europe'
-ORDER BY Population DESC
-LIMIT n 
+WHERE region = 'Eastern Europe'
+ORDER BY population DESC
+LIMIT n
 ;

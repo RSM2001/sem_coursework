@@ -1,6 +1,6 @@
 --The top N populated countries in the world where N is provided by the user.
-SELECT Code, Name, Continent, Region, Population, Capital
+SELECT code, name, continent, region, population, capital
 FROM country
-ORDER BY Population DESC
+ORDER BY population DESC
 LIMIT n
 ;
