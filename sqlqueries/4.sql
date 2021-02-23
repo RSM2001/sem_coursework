@@ -2,5 +2,5 @@
 SELECT code, name, continent, region, population, capital
 FROM country
 ORDER BY population DESC
-LIMIT n
+LIMIT n 
 ;

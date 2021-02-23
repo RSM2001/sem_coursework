@@ -3,5 +3,5 @@ SELECT code, name, continent, region, population, capital
 FROM country
 WHERE region = 'Eastern Europe'
 ORDER BY population DESC
-LIMIT n
+LIMIT n 
 ;
