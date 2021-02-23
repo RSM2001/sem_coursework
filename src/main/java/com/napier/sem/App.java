@@ -106,7 +106,7 @@ public class App
                 while (scanner.hasNextLine())
                 {
                     String readLine = scanner.nextLine();
-                    readLine = readLine.replace(" n ", Integer.toString(n));
+                    readLine = readLine.replace(" n ", " " + n + " ");
                     if (!readLine.startsWith("--"))
                         query = query.concat(readLine + ' ');
                 }
