@@ -2,6 +2,7 @@ package com.napier.sem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 import java.sql.*;
 
@@ -19,7 +20,7 @@ public class App
     /**
      * The number of results to display
      */
-    private int n = 10;
+    private final int n = 10;
 
     /**
      * Connect to the MySQL database.
@@ -82,32 +83,10 @@ public class App
     }
 
     /**
-     * Main method
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        // Create new Application
-        App a = new App();
-
-        // Connect to database
-        a.connect();
-
-        //
-
-        // Execute SQL statements in SQLQueries directory
-        for (int i = 1; i <= 32; i++)
-            a.executeQuery(i);
-
-        // Disconnect from database
-        a.disconnect();
-    }
-
-    /**
      * Executes SQL query
      * @param count number of query to be executed
-     * @return result set from SQL query
      */
-    public ResultSet executeQuery(int count)
+    public void executeQuery(int count)
     {
         System.out.println("\nExecuting Query " + count + ".");
         try
@@ -127,6 +106,7 @@ public class App
                 while (scanner.hasNextLine())
                 {
                     String readLine = scanner.nextLine();
+                    readLine = readLine.replace(" n ", Integer.toString(n));
                     if (!readLine.startsWith("--"))
                         query = query.concat(readLine + ' ');
                 }
@@ -137,18 +117,54 @@ public class App
             }
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
-            // Return new country if valid.
-            // Check one is returned
-            if (rset.next()) {
-                System.out.println("Query complete.");
-                return rset;
+            // Check if result is empty
+            if (rset == null) {
+                System.out.println("No results.");
+                return;
             }
-            else
-                return null;
+            // Create .csv file if it doesn't exist, open if it exists
+            FileWriter csvWriter = new FileWriter("./query-results.csv", true);
+            // Get column names from meta data
+            ResultSetMetaData rsetMetaData = rset.getMetaData();
+
+            for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
+                csvWriter.append(rsetMetaData.getColumnName(i)).append(",");
+            csvWriter.append("\n");
+
+            // Write results to .csv file
+            while (rset.next()) {
+                String resultStr = "";
+                for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
+                    resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                // .csv writer
+                csvWriter.append(resultStr.concat("\n"));
+            }
+            csvWriter.append("\n\n\n");
+            csvWriter.flush();
+            csvWriter.close();
+            System.out.println("Query complete.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to execute query.");
-            return null;
         }
+    }
+
+    /**
+     * Main method
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        // Create new Application
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        // Execute SQL statements in SQLQueries directory
+        for (int i = 1; i <= 32; i++)
+            a.executeQuery(i);
+
+        // Disconnect from database
+        a.disconnect();
     }
 }

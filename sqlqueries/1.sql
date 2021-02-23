@@ -1,5 +1,3 @@
---This is comment
-SELECT code, name, population
-FROM country
-WHERE code = 'GBR'
-;
+--All the countries in the world organised by largest population to smallest.
+SELECT Code, Name, Continent, Region, Population, Capital FROM country
+ORDER BY Population DESC
