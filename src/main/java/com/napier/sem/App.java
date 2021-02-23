@@ -106,7 +106,7 @@ public class App
                 while (scanner.hasNextLine())
                 {
                     String readLine = scanner.nextLine();
-                    readLine = readLine.replace(" n ", Integer.toString(n));
+                    readLine = readLine.replace(" n ", " " + n + " ");
                     if (!readLine.startsWith("--"))
                         query = query.concat(readLine + ' ');
                 }
@@ -118,7 +118,7 @@ public class App
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
             // Check if result is empty
-            if (rset == null) {
+            if (rset.isAfterLast()) {
                 System.out.println("No results.");
                 return;
             }
@@ -132,10 +132,18 @@ public class App
             csvWriter.append("\n");
 
             // Write results to .csv file
+            String resultStr;
             while (rset.next()) {
-                String resultStr = "";
+                resultStr = "";
                 for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
-                    resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                    try
+                    {
+                        resultStr = resultStr.concat(rset.getString(i)).concat(",");
+                    }
+                    catch (Exception e)
+                    {
+                        resultStr = resultStr.concat("n/a,");
+                    }
                 // .csv writer
                 csvWriter.append(resultStr.concat("\n"));
             }
