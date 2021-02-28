@@ -7,7 +7,9 @@
 As a geography teacher I want to be able to see a list of the cities in the world, in a continent, 
 in a region, in a country and in a district, all organised by largest population to smallest.
 I also want to be able to see the top N populated cities in the world, in a continent,
-in a region, in a country and in a district,where N is provided by me, so that my students 
+in a region, in a country and in a district, where N is provided by me.
+Finally, I want to know the population of people, people living in cities, and people not living 
+in cities in each continent, each region and each country so that my students 
 can complete their urbanisation projects.
 
 ### Scope
@@ -24,7 +26,7 @@ We know the role. Database contains population information about countries, citi
 
 ### Success End Condition
 
-The ten reports are available for the teacher to provide to his students.
+The thirteen reports are available for the teacher to provide to their students.
 
 ### Failed End Condition
 

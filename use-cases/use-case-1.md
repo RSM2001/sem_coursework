@@ -7,7 +7,7 @@
 As a geography teacher I want to be able to see a list of the countries in the world, in a continent and 
 in a region, all organised by largest population to smallest.
 I also want to be able to see the top N populated countries in the world, in a 
-continent and in a region,where N is provided by me, so my students can graph this information.
+continent and in a region, where N is provided by me, so my students can graph this information.
 
 ### Scope
 

@@ -1,14 +1,14 @@
-# USE CASE: 3 Produce several reports regarding capital cities
+# USE CASE: 4 Produce several reports regarding population and languages
 
 ## CHARACTERISTIC INFORMATION
 
 ### Goal in Context
 
-As a geography teacher I want to be able to see a list of the capital cities in the world, 
-in a continent and in a region, all organised by largest population to smallest.
-I also want to be able to see the top N populated capital cities in the world, in a
-continent and in a region, where N is provided by me, so my students can analyse the 
-differences in the population density of capital cities.
+As a geography teacher I want to know the population of the world, of a continent,
+a region, a country, a district and a city.
+I also want to be able to display the number of people who speak Chinese, English, 
+Hindi, Spanish and Arabic, organised from greatest to smallest with the percentage 
+of the world that speak them, so I can create infographics for my students.
 
 ### Scope
 
@@ -24,7 +24,7 @@ We know the role. Database contains population information about countries, citi
 
 ### Success End Condition
 
-The six reports are available for the teacher to provide to their students.
+The seven reports are available for the teacher to provide to their students.
 
 ### Failed End Condition
 
@@ -40,9 +40,8 @@ Geography Teacher.
 
 ## MAIN SUCCESS SCENARIO
 
-1. Geography teacher defines N.
-2. Geography teacher extracts the capital city information.
-3. Geography teacher passes the information on to their students.
+1. Geography teacher extracts the country information.
+2. Geography teacher creates the infographics for their students.
 
 ## EXTENSIONS
 
