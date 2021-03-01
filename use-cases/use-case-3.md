@@ -47,7 +47,7 @@ The school term starts and assignments are handed out.
 ## EXTENSIONS
 
 1a. system can't find the sql file.
-    1a1. system ends error message.
+    1a1. system sends error message.
 
 ## SUB-VARIATIONS
 
