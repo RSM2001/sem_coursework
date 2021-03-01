@@ -124,6 +124,8 @@ public class App
             }
             // Create .csv file if it doesn't exist, open if it exists
             FileWriter csvWriter = new FileWriter("./query-results.csv", true);
+            // Append query number
+            csvWriter.append(Integer.toString(count).concat("\n"));
             // Get column names from meta data
             ResultSetMetaData rsetMetaData = rset.getMetaData();
 
