@@ -46,8 +46,8 @@ The school term starts and assignments are handed out.
 
 ## EXTENSIONS
 
-1a. N value is invalid (bigger than number of records available)
-    1a1. error message is returned.
+1a. system can't find the sql file.
+    1a1. system ends error message.
 
 ## SUB-VARIATIONS
 

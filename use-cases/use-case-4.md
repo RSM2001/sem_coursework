@@ -45,7 +45,8 @@ The school term starts and teaching resources are required to be created.
 
 ## EXTENSIONS
 
-None.
+1a. system can't find the sql file.
+    1a1. system ends error message.
 
 ## SUB-VARIATIONS
 
