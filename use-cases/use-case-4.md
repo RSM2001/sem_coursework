@@ -12,11 +12,11 @@ of the world that speak them, so I can create infographics for my students.
 
 ### Scope
 
-*what system is considered black-box under design*
+Geography Department.
 
 ### Level
 
-*one of: Summary, Primary task, subfunction*
+Primary.
 
 ### Preconditions
 
@@ -36,7 +36,7 @@ Geography Teacher.
 
 ### Trigger
 
-*the action upon the system that starts the use case, may be a time event*
+The school term starts and teaching resources are required to be created.
 
 ## MAIN SUCCESS SCENARIO
 
@@ -45,18 +45,12 @@ Geography Teacher.
 
 ## EXTENSIONS
 
-*put here the extensions, one at a time, each referring to the step of the main scenario*
-
-1. **Condition**: action of sub use case
+None.
 
 ## SUB-VARIATIONS
 
-*put here the sub-variations that will cause eventual branching in the scenario
-
-1. list of sub-variations
+None.
 
 ## SCHEDULE
 
-**DUE DATE**: *date or release of deployment*
-
-*any other schedule/staffing information you need*
+Release 1.0
