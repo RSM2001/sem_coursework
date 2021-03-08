@@ -5,7 +5,6 @@
 left to right direction
 
 actor Teacher as "Geography Teacher"
-
 rectangle database
 
 rectangle "Population System" {
