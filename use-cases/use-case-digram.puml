@@ -10,15 +10,10 @@ rectangle database
 
 rectangle "Population System" {
         
-                usecase UC1 as "Produce several reports 
-                                regarding countries"
-                usecase UC2 as "Produce several reports
-                                regarding cities"
-                usecase UC3 as "Produce several reports 
-                                regarding capital cities"
-                usecase UC4 as "Produce several reports 
-                    regarding population
-                     and languages"
+        usecase UC1 as "Use Case 1"
+        usecase UC2 as "Use Case 2"
+        usecase UC3 as "Use Case 3"
+        usecase UC4 as "Use Case 4"
 
         Teacher -- UC1
         Teacher -- UC2
