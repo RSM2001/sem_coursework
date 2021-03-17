@@ -39,4 +39,4 @@ stages:
   - name: deploy
     if: branch = main
   - deploy
-    if: branch = develop
+    if: branch = develop 
