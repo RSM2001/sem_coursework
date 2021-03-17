@@ -25,19 +25,14 @@ jobs:
       script: mvn test -Dtest=MyTest
     - stage: integration tests
       jdk: oraclejdk11
-      script: mvn test -Dtest=AppIntegrationTest
+      script: echo "Integration Tests"
     - stage: deploy
       install: skip
       jdk: oraclejdk11
-      script:
-        - mvn package -DskipTests=true -Dmaven.javadoc.skip=true
-        - docker-compose up --abort-on-container-exit
+      script: echo "Deploy"
 
 stages:
   - unit tests
   - integration tests
   - name: deploy
     if: branch = main
-    
-after_success: 
-  - bash <(curl -s https://codecov.io/bash)
