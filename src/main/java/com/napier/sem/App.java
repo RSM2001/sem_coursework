@@ -209,7 +209,10 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect("localhost:33060");
+        if (args.length < 1)
+            a.connect("localhost:3306");
+        else
+            a.connect(args[0]);
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
