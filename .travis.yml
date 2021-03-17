@@ -36,7 +36,5 @@ jobs:
 stages:
   - unit tests
   - integration tests
-  - deploy
-    if: branch = main
-  - deploy
-    if: branch = develop 
+  - name: deploy
+    if: branch = develop
