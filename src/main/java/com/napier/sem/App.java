@@ -25,7 +25,7 @@ public class App
     /**
      * Connect to the MySQL database.
      */
-    public void connect()
+    public void connect ()
     {
         try
         {
@@ -66,7 +66,7 @@ public class App
     /**
      * Disconnect from the MySQL database.
      */
-    public void disconnect()
+    public void disconnect ()
     {
         if (con != null)
         {
@@ -83,10 +83,11 @@ public class App
     }
 
     /**
-     * Executes SQL query
-     * @param count number of query to be executed
+     * gets SQL query from folder
+     * @param count identifying number of the query to be executed
+     * @return sql query
      */
-    public String getQuery(int count)
+    public String getQuery (int count)
     {
         System.out.println("\nExecuting Query " + count + ".");
         try
@@ -120,7 +121,12 @@ public class App
         }
         return null;
     }
-    
+
+    /**
+     * executes sql query
+     * @param query sql query to be executed
+     * @return result set of results from query
+     */
     public ResultSet executeQuery (String query)
     {
         try
@@ -143,10 +149,16 @@ public class App
         }
         return null;
     }
-    
+
+    /**
+     * writes query results to .csv file
+     * @param rset sql query results
+     * @param count identifying number of the query
+     */
     public void writeQuery (ResultSet rset, int count)
     {
-        try {
+        try 
+        {
             // Create .csv file if it doesn't exist, open if it exists
             FileWriter csvWriter = new FileWriter("./query-results.csv", true);
             // Append query number
@@ -160,12 +172,16 @@ public class App
 
             // Write results to .csv file
             String resultStr;
-            while (rset.next()) {
+            while (rset.next()) 
+            {
                 resultStr = "";
                 for (int i = 1; i <= rsetMetaData.getColumnCount(); i++)
-                    try {
+                    try 
+                    {
                         resultStr = resultStr.concat("\"").concat(rset.getString(i)).concat("\",");
-                    } catch (Exception e) {
+                    } 
+                    catch (Exception e) 
+                    {
                         resultStr = resultStr.concat("n/a,");
                     }
                 // .csv writer
@@ -179,7 +195,6 @@ public class App
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
             System.out.println("Failed to write query.");
         }
     }
