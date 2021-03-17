@@ -210,7 +210,7 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect("127.0.0.1:3306");
+        a.connect("127.0.0.1:33060");
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
