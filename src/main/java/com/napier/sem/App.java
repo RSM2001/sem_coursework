@@ -25,7 +25,7 @@ public class App
     /**
      * Connect to the MySQL database.
      */
-    public void connect()
+    public void connect ()
     {
         try
         {
@@ -66,7 +66,7 @@ public class App
     /**
      * Disconnect from the MySQL database.
      */
-    public void disconnect()
+    public void disconnect ()
     {
         if (con != null)
         {
@@ -83,16 +83,15 @@ public class App
     }
 
     /**
-     * Executes SQL query
-     * @param count number of query to be executed
+     * gets SQL query from folder
+     * @param count identifying number of the query to be executed
+     * @return sql query
      */
-    public void executeQuery(int count)
+    public String getQuery (int count)
     {
         System.out.println("\nExecuting Query " + count + ".");
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
             // Create string for SQL statement
             String query = "";
             // Read in SQL file
@@ -110,18 +109,56 @@ public class App
                     if (!readLine.startsWith("--"))
                         query = query.concat(readLine + ' ');
                 }
+                return query;
             }
             catch (FileNotFoundException e)
             {
                 System.out.println("Error - File not found. Query number " + count + ".");
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to execute query.");
+        }
+        return null;
+    }
+
+    /**
+     * executes sql query
+     * @param query sql query to be executed
+     * @return result set of results from query
+     */
+    public ResultSet executeQuery (String query)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(query);
             // Check if result is empty
             if (rset.isAfterLast()) {
                 System.out.println("No results.");
-                return;
+                return null;
             }
+            return rset;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to execute query.");
+        }
+        return null;
+    }
+
+    /**
+     * writes query results to .csv file
+     * @param rset sql query results
+     * @param count identifying number of the query
+     */
+    public void writeQuery (ResultSet rset, int count)
+    {
+        try 
+        {
             // Create .csv file if it doesn't exist, open if it exists
             FileWriter csvWriter = new FileWriter("./query-results.csv", true);
             // Append query number
@@ -129,42 +166,45 @@ public class App
             // Get column names from meta data
             ResultSetMetaData rsetMetaData = rset.getMetaData();
 
-            for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
+            for (int i = 1; i <= rsetMetaData.getColumnCount(); i++)
                 csvWriter.append(rsetMetaData.getColumnName(i)).append(",");
             csvWriter.append("\n");
 
             // Write results to .csv file
             String resultStr;
-            while (rset.next()) {
+            while (rset.next()) 
+            {
                 resultStr = "";
-                for (int i= 1; i<=rsetMetaData.getColumnCount(); i++)
-                    try
+                for (int i = 1; i <= rsetMetaData.getColumnCount(); i++)
+                    try 
                     {
                         resultStr = resultStr.concat("\"").concat(rset.getString(i)).concat("\",");
-                    }
-                    catch (Exception e)
+                    } 
+                    catch (Exception e) 
                     {
                         resultStr = resultStr.concat("n/a,");
                     }
                 // .csv writer
-                resultStr = resultStr.substring(0,resultStr.length()-1);
+                resultStr = resultStr.substring(0, resultStr.length() - 1);
                 csvWriter.append(resultStr.concat("\n"));
             }
             csvWriter.append("\n\n\n");
             csvWriter.flush();
             csvWriter.close();
             System.out.println("Query complete.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Failed to execute query.");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to write query.");
         }
     }
-
+    
     /**
      * Main method
      * @param args command line arguments
      */
-    public static void main(String[] args) {
+    public static void main (String[] args)
+    {
         // Create new Application
         App a = new App();
 
@@ -173,7 +213,7 @@ public class App
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
-            a.executeQuery(i);
+            a.writeQuery(a.executeQuery(a.getQuery(i)), i);
 
         // Disconnect from database
         a.disconnect();
