@@ -199,7 +199,6 @@ public class App
         }
     }
     
-    
     /**
      * Main method
      * @param args command line arguments
@@ -210,7 +209,7 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect("127.0.0.1:33060");
+        a.connect("localhost:3306");
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
