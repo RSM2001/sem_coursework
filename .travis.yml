@@ -37,6 +37,4 @@ stages:
   - unit tests
   - integration tests
   - name: deploy
-    if: branch = main
-  - name: deploy
-    if: branch = develop
+    if: branch = main OR branch = develop
