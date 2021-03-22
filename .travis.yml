@@ -21,7 +21,7 @@ jobs:
   include:
     - stage: unit tests
       jdk: oraclejdk11
-      script: mvn test -Dtest=MyTest
+      script: mvn test -Dtest=AppUnitTest
     - stage: integration tests
       jdk: oraclejdk11
       script: mvn test -Dtest=AppIntegrationTest
