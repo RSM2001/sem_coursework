@@ -15,7 +15,28 @@ class AppUnitTest
         app = new App();
         app.connect("localhost:33060");
     }
+    
+    @Test
+    void getQuery_FileExistTest ()
+    {
+        assertEquals("SELECT code, name, continent, region, population, capital " +
+                "FROM country " +
+                "WHERE code = \"GBR\" " +
+                "; ", app.getQuery("test1"));
+    }
 
+    @Test
+    void getQuery_FileNotExistTest ()
+    {
+        assertNull(app.getQuery("test0"));
+    }
+
+    @Test
+    void getQuery_SkipCommentTest ()
+    {
+        assertEquals(app.getQuery("test1"), app.getQuery("test2"));
+    }
+    
     @Test
     void executeQuery_ResultsTest ()
     {
