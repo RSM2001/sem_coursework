@@ -47,7 +47,8 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://"+location+"/world?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://" + location + 
+                        "/world?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -84,12 +85,12 @@ public class App
 
     /**
      * gets SQL query from folder
-     * @param count identifying number of the query to be executed
+     * @param filename name of the file containing the query to be executed
      * @return sql query
      */
-    public String getQuery (int count)
+    public String getQuery (String filename)
     {
-        System.out.println("\nExecuting Query " + count + ".");
+        System.out.println("\nExecuting Query " + filename + ".");
         try
         {
             // Create string for SQL statement
@@ -97,8 +98,8 @@ public class App
             // Read in SQL file
             try
             {
-                // Create filepath from count
-                File file = new File("./sqlqueries/" + count + ".sql");
+                // Create filepath from filename
+                File file = new File("./sqlqueries/" + filename + ".sql");
                 // Create new Scanner
                 Scanner scanner = new Scanner(file);
                 // Read lines into string
@@ -113,7 +114,7 @@ public class App
             }
             catch (FileNotFoundException e)
             {
-                System.out.println("Error - File not found. Query number " + count + ".");
+                System.out.println("Error - File not found. File " + filename + ".");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -155,20 +156,22 @@ public class App
      * @param rset sql query results
      * @param count identifying number of the query
      */
-    public void writeQuery (ResultSet rset, int count)
+    public void writeQuery (ResultSet rset, int count, String filename)
     {
         try 
         {
             // Create .csv file if it doesn't exist, open if it exists
-            FileWriter csvWriter = new FileWriter("./query-results.csv", true);
+            FileWriter csvWriter = new FileWriter("./" + filename + ".csv", true);
             // Append query number
             csvWriter.append(Integer.toString(count).concat("\n"));
             // Get column names from meta data
             ResultSetMetaData rsetMetaData = rset.getMetaData();
 
-            for (int i = 1; i <= rsetMetaData.getColumnCount(); i++)
-                csvWriter.append(rsetMetaData.getColumnName(i)).append(",");
-            csvWriter.append("\n");
+            String columnNames = "";
+            for (int i = 1; i <= rsetMetaData.getColumnCount(); i++) 
+                columnNames = columnNames.concat(rsetMetaData.getColumnName(i)).concat(",");
+            columnNames = columnNames.substring(0, columnNames.length() - 1);
+            csvWriter.append(columnNames.concat("\n"));
 
             // Write results to .csv file
             String resultStr;
@@ -213,10 +216,21 @@ public class App
             a.connect("localhost:3306");
         else
             a.connect(args[0]);
+        
+        // Wipe file for writing results into
+        try 
+        {
+            FileWriter csvWriter = new FileWriter("./query-results.csv");
+            csvWriter.close();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
 
         // Execute SQL statements in SQLQueries directory
         for (int i = 1; i <= 32; i++)
-            a.writeQuery(a.executeQuery(a.getQuery(i)), i);
+            a.writeQuery(a.executeQuery(a.getQuery(Integer.toString(i))), i, "query-results");
 
         // Disconnect from database
         a.disconnect();

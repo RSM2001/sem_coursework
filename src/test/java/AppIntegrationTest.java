@@ -1,11 +1,5 @@
-
 import com.napier.sem.App;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
-import java.util.ArrayList;
-
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AppIntegrationTest
@@ -25,4 +19,9 @@ public class AppIntegrationTest
         assertEquals(5, 5);
     }
 
+    @AfterAll
+    static void disconnect ()
+    {
+        app.disconnect();
+    }
 }
